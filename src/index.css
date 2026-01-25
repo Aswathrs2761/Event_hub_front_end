@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import 'react-toastify/dist/ReactToastify.css';
+.input {
+  @apply w-full bg-[#0f0f18] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500;
+}
+
+
