@@ -80,8 +80,9 @@ export default function ResetPassword() {
               <input
                 type="password"
                 placeholder="Enter your new password"
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 value={password}
+                autoComplete="off"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -94,8 +95,9 @@ export default function ResetPassword() {
               <input
                 type="password"
                 placeholder="Confirm your new password"
-                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 value={confirmPassword}
+                autoComplete="off"
+                className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Slide, toast, ToastContainer, Zoom } from 'react-toastify';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
 import Register from './pages/Register.jsx';
@@ -102,6 +103,8 @@ function App() {
           <Route path='/admin' element={<Admin/>} />
           
         </Routes>
+
+        <Footer />
       </BrowserRouter>
     </>
   );

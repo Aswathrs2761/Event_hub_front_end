@@ -42,49 +42,49 @@ export default function Home() {
       </div>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center px-6 pt-24 pb-12 overflow-hidden">
-        <div className="relative z-10 max-w-6xl mx-auto">
+      <section className="relative flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8 sm:pb-12 overflow-hidden">
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-6 sm:mb-8 text-xs sm:text-sm">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm text-gray-300 font-medium">Live Events Platform</span>
+            <span className="text-gray-300 font-medium">Live Events Platform</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
-            Discover Events <br />
+          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4 sm:mb-6">
+            Discover Events <br className="hidden sm:block" />
             <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
               That Inspire You
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="max-w-3xl mx-auto text-gray-300 text-lg md:text-xl leading-relaxed mb-12">
+          <p className="max-w-3xl mx-auto text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-12 px-2">
             Join thousands of event enthusiasts. Find concerts, conferences, workshops, and unforgettable
             experiences. Create, manage, and sell tickets for your own events with ease.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-12 sm:mb-16 w-full sm:w-auto px-2">
             <button
               onClick={() => nav("/Events")}
-              className="group px-8 py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300"
+              className="group px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 text-white font-semibold text-sm sm:text-lg hover:shadow-2xl hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300"
             >
-              <span className="flex items-center gap-3">
+              <span className="flex items-center justify-center gap-3">
                 Explore Events
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
             </button>
             <button
               onClick={() => nav("/register")}
-              className="group px-8 py-4 rounded-2xl bg-transparent border-2 border-purple-500/50 text-purple-300 font-semibold text-lg hover:bg-purple-500/10 hover:border-purple-400 hover:text-purple-200 transform hover:scale-105 transition-all duration-300"
+              className="group px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-transparent border-2 border-purple-500/50 text-purple-300 font-semibold text-sm sm:text-lg hover:bg-purple-500/10 hover:border-purple-400 hover:text-purple-200 transform hover:scale-105 transition-all duration-300"
             >
-              <span className="flex items-center gap-3">
+              <span className="flex items-center justify-center gap-3">
                 Create Events
-                <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 sm:w-5 h-4 sm:h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </span>
@@ -92,74 +92,74 @@ export default function Home() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-4xl mx-auto px-2">
             <div className="text-center group">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
                 {stats.totalEvents.toLocaleString()}+
               </div>
-              <div className="text-gray-400 font-medium">Events Created</div>
+              <div className="text-gray-400 font-medium text-sm sm:text-base">Events Created</div>
             </div>
             <div className="text-center group">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
                 {stats.totalUsers.toLocaleString()}+
               </div>
-              <div className="text-gray-400 font-medium">Active Users</div>
+              <div className="text-gray-400 font-medium text-sm sm:text-base">Active Users</div>
             </div>
             <div className="text-center group">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform">
                 {stats.totalTickets.toLocaleString()}+
               </div>
-              <div className="text-gray-400 font-medium">Tickets Sold</div>
+              <div className="text-gray-400 font-medium text-sm sm:text-base">Tickets Sold</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="relative px-6 py-12">
+      <section className="relative px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
               Why Choose <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">EventHub</span>?
             </h2>
-            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto px-2">
               Experience the future of event management with our cutting-edge platform designed for organizers and attendees alike.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="group p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-4">Lightning Fast</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <h3 className="text-lg sm:text-xl font-bold mb-4">Lightning Fast</h3>
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
                 Experience blazing-fast event discovery and ticket purchasing with our optimized platform.
               </p>
             </div>
 
-            <div className="group p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-pink-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/10">
+            <div className="group p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-pink-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/10">
               <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-4">Secure & Reliable</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <h3 className="text-lg sm:text-xl font-bold mb-4">Secure & Reliable</h3>
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
                 Your data and payments are protected with enterprise-grade security and SSL encryption.
               </p>
             </div>
 
-            <div className="group p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-green-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/10">
+            <div className="group p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-white/5 to-white/10 border border-white/10 hover:border-green-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/10">
               <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-4">Community Driven</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <h3 className="text-lg sm:text-xl font-bold mb-4">Community Driven</h3>
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
                 Join a vibrant community of event organizers and attendees from around the world.
               </p>
             </div>

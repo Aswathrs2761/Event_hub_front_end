@@ -14,13 +14,50 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await API.post("/auth/login", form);
+      // Validate inputs
+      if (!form.email || !form.password) {
+        toast.error("Please enter email and password");
+        return;
+      }
+
+      if (!form.email.includes("@")) {
+        toast.error("Please enter a valid email");
+        return;
+      }
+
+      console.log("🔐 Attempting login with:", { email: form.email, password: "****" });
+      
+      const res = await API.post("/auth/login", {
+        email: form.email.trim(),
+        password: form.password
+      });
+
+      console.log("✅ Login successful:", res.data);
+      
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
-      toast("Login successfully");
+      toast.success("Login successful! Redirecting...");
       navigate("/Events");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
+      console.error("❌ Login error:", {
+        status: err.response?.status,
+        message: err.response?.data?.message,
+        error: err.response?.data?.error,
+        details: err.response?.data
+      });
+
+      // Handle specific errors
+      if (err.response?.status === 401) {
+        toast.error("Invalid email or password");
+      } else if (err.response?.status === 404) {
+        toast.error("User not found. Please register first");
+      } else if (err.response?.status === 500) {
+        toast.error("Server error. Please try again later");
+      } else if (err.code === "ERR_NETWORK") {
+        toast.error("Cannot connect to server. Is backend running at http://localhost:5000?");
+      } else {
+        toast.error(err.response?.data?.message || "Login failed");
+      }
     }
   };
 
@@ -60,6 +97,8 @@ export default function Login() {
               <input
                 type="email"
                 placeholder="you@example.com"
+                value={form.email}
+                autoComplete="off"
                 className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 onChange={(e) =>
                   setForm({ ...form, email: e.target.value })
@@ -76,6 +115,8 @@ export default function Login() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={form.password}
+                  autoComplete="off"
                   className="w-full px-4 py-3 pr-16 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   onChange={(e) =>
                     setForm({ ...form, password: e.target.value })

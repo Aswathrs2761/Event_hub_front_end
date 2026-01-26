@@ -87,6 +87,8 @@ export default function Register() {
               <input
                 type="text"
                 placeholder="John Doe"
+                value={data.name}
+                autoComplete="off"
                 className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 onChange={(e) =>
                   setData({ ...data, name: e.target.value })
@@ -102,6 +104,8 @@ export default function Register() {
               <input
                 type="email"
                 placeholder="you@example.com"
+                value={data.email}
+                autoComplete="off"
                 className="w-full px-4 py-3 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                 onChange={(e) =>
                   setData({ ...data, email: e.target.value })
@@ -118,6 +122,8 @@ export default function Register() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={data.password}
+                  autoComplete="off"
                   className="w-full px-4 py-3 pr-16 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   onChange={(e) =>
                     setData({ ...data, password: e.target.value })
@@ -142,6 +148,8 @@ export default function Register() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
+                  value={data.confirmPassword}
+                  autoComplete="off"
                   className="w-full px-4 py-3 pr-16 rounded-xl bg-[#0a0a0f] border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   onChange={(e) =>
                     setData({ ...data, confirmPassword: e.target.value })

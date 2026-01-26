@@ -35,48 +35,50 @@ export default function OrganizerDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#0f0f14] via-[#111118] to-[#09090d] flex">
+    <div className="min-h-screen bg-linear-to-br from-[#0f0f14] via-[#111118] to-[#09090d] flex flex-col lg:flex-row">
       {/* Sidebar */}
-      <div className="w-64 bg-linear-to-b from-[#1a1a24] to-[#0f0f14] border-r border-white/10 shadow-2xl">
-        <div className="p-6 border-b border-white/10">
+      <div className="w-full lg:w-64 bg-linear-to-b from-[#1a1a24] to-[#0f0f14] border-b lg:border-b-0 lg:border-r border-white/10 shadow-2xl">
+        <div className="p-4 sm:p-6 border-b border-white/10">
           <button
             onClick={() => navigate("/")}
             className="mb-4 p-2 bg-white/10 hover:bg-white/20 rounded-xl"
           >
             ←
           </button>
-          <h1 className="text-2xl font-bold bg-linear-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold bg-linear-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">
             Organizer Hub
           </h1>
-          <p className="text-gray-400 text-sm">Manage your events</p>
+          <p className="text-gray-400 text-xs sm:text-sm">Manage your events</p>
         </div>
 
-        <nav className="p-4 space-y-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                if (tab.id === "create") {
-                  navigate("/create"); // goes to CreateEvent.jsx
-                } else {
-                  setActiveTab(tab.id);
-                }
-              }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition ${
-                activeTab === tab.id
-                  ? "bg-linear-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/30 text-pink-300"
-                  : "text-gray-400 hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              <span>{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
+        <nav className="p-3 sm:p-4 space-y-2 overflow-x-auto lg:overflow-x-visible">
+          <div className="flex lg:flex-col gap-2 pb-2 lg:pb-0">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  if (tab.id === "create") {
+                    navigate("/create"); // goes to CreateEvent.jsx
+                  } else {
+                    setActiveTab(tab.id);
+                  }
+                }}
+                className={`flex-shrink-0 lg:flex-shrink flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-2xl transition whitespace-nowrap lg:whitespace-normal text-sm sm:text-base ${
+                  activeTab === tab.id
+                    ? "bg-linear-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/30 text-pink-300"
+                    : "text-gray-400 hover:bg-white/5 hover:text-white"
+                }`}
+              >
+                <span className="text-lg sm:text-xl">{tab.icon}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </nav>
       </div>
 
       {/* Main */}
-      <div className="flex-1 p-8 overflow-auto">
+      <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-auto">
         <div className="max-w-7xl mx-auto">{renderContent()}</div>
       </div>
     </div>

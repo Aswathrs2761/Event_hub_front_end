@@ -97,11 +97,39 @@ function CreateEventForm() {
   const [category, setCategory] = useState("");
   const [otherCategory, setOtherCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   const updateTicket = (i, field, value) => {
     const next = [...tickets];
     next[i][field] = value;
     setTickets(next);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size must be less than 5MB");
+        return;
+      }
+
+      setImageFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -114,6 +142,7 @@ function CreateEventForm() {
       // Validate required fields
       if (!form.get("eventtitle")) return toast.error("Event title is required");
       if (!form.get("description")) return toast.error("Description is required");
+      if (!imageFile) return toast.error("Please upload an event image");
       if (!category) return toast.error("Please select a category");
       if (category === "Other" && !otherCategory) return toast.error("Please specify the event category");
       if (tickets.length === 0) return toast.error("Please add at least one ticket type");
@@ -121,6 +150,7 @@ function CreateEventForm() {
       const payload = {
         eventtitle: form.get("eventtitle"),
         description: form.get("description"),
+        imageUrl: imagePreview,
         category,
         otherCategory: category === "Other" ? otherCategory : category,
         startDate: form.get("startDate"),
@@ -166,6 +196,8 @@ function CreateEventForm() {
       e.target.reset();
       setTickets([]);
       setCategory("");
+      setImageFile(null);
+      setImagePreview(null);
     } catch (err) {
       console.error("Error creating event:", err);
       console.error("Error response:", err.response?.data);
@@ -201,6 +233,29 @@ function CreateEventForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <Input name="eventtitle" label="Event Title" required />
         <Textarea name="description" label="Description" required />
+
+        {/* Image Upload */}
+        <div>
+          <label className="block text-sm text-gray-300 mb-2">Event Image</label>
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-pink-600 file:to-purple-600 file:text-white hover:file:from-pink-700 hover:file:to-purple-700 cursor-pointer"
+            />
+          </div>
+          {imagePreview && (
+            <div className="mt-4">
+              <p className="text-sm text-gray-400 mb-2">Preview:</p>
+              <img
+                src={imagePreview}
+                alt="Event Preview"
+                className="w-full h-48 object-cover rounded-xl border border-white/10"
+              />
+            </div>
+          )}
+        </div>
 
         <div>
           <label className="block text-sm text-gray-300 mb-2">Category</label>
