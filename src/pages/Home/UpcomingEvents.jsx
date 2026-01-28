@@ -118,11 +118,11 @@ export default function UpcomingEvents() {
             </div>
 
             {/* Price badge */}
-            <div className="absolute top-4 right-4">
+            {/* <div className="absolute top-4 right-4">
               <span className="px-4 py-2 text-sm rounded-2xl bg-black/60 backdrop-blur-xl text-white font-bold border border-white/20 shadow-lg">
                 ₹{event.price || "Free"}
               </span>
-            </div>
+            </div> */}
 
             {/* Content */}
             <div className="p-4">
