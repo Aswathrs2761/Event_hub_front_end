@@ -20,7 +20,7 @@ export default function PaymentInfo() {
         if (!token) return;
 
         const decoded = jwtDecode(token);
-        console.log(decoded);
+        // console.log(decoded);
 
         const [totalRes, ticketsRes] = await Promise.all([
           axios.get("https://event-hub-backend-uzcs.onrender.com/api/payment/organizer-total", {
@@ -40,7 +40,7 @@ export default function PaymentInfo() {
 
         setPreviousStats(stats);
         setStats(newStats);
-        console.log(ticketsRes.data.totalTicketsSold);
+        // console.log(ticketsRes.data.totalTicketsSold);
       } catch (err) {
         console.error("Failed to fetch stats:", err);
       } finally {

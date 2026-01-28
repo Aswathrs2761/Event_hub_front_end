@@ -32,7 +32,7 @@ export default function Categories() {
 
         // ✅ Safe fallback
         const events = res.data || [];
-        console.log("Fetched events:", res.data);
+        // console.log("Fetched events:", res.data);
 
         /* 🔥 GROUP EVENTS BY CATEGORY */
         const grouped = events.reduce((acc, event) => {

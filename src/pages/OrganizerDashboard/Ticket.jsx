@@ -28,7 +28,7 @@ const Ticket = () => {
       
       setTickets(res.data.tickets || []);
     } catch (err) {
-      console.error("Error fetching tickets:", err);
+      // console.error("Error fetching tickets:", err);
       setError(err?.response?.data?.message || "Failed to load tickets");
       toast.error("Failed to load tickets");
     } finally {

@@ -1,16 +1,77 @@
-# React + Vite
+# Event_Hub – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Event_Hub is a modern event management platform where users can create, update, delete, and view events. Users can purchase tickets using Stripe, receive tickets via email after successful payment, and cancel tickets with automatic refunds and email notifications.  
+Admins have full control over events, users, and payments, including approving events.
 
-Currently, two official plugins are available:
+This repository contains the **frontend** of the application built with **React + Vite** and styled using **Tailwind CSS**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### User
+- Register & Login using JWT authentication
+- Browse and view events
+- Purchase tickets using Stripe
+- Receive email notifications for ticket purchases and cancellations
+- Cancel tickets and get automatic refunds
+- Email notification on refund
 
-## Expanding the ESLint configuration
+# http://localhost:5173/register
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- can register has user
+
+
+### Organizer
+
+- Create and manage events
+- View event details and ticket sales
+- Access to event-specific analytics
+- Event update and deletion
+- View user ticket purchases for their events
+- Receive email notifications for ticket purchases and cancellations
+- Purchase tickets using Stripe
+- Cancel tickets and get automatic refunds
+- Email notification on refund
+
+# http://localhost:5173/register/organizer
+
+- can register has organizer
+
+
+### Admin
+- Role-based dashboard
+- View all users, events, and payments
+- Approve or reject events
+- Full access to system data
+
+# http://localhost:5173/register/admin
+
+- can register has admin
+
+### Frontend Capabilities
+- Role-based UI (User / Admin)
+- Protected routes
+- Payment page integration
+- Responsive design with Tailwind CSS
+- API integration with backend
+
+---
+
+## 🛠 Tech Stack
+
+- **React** (with Vite)
+- **Tailwind CSS**
+- **JWT Authentication**
+- **Stripe (Frontend Integration)**
+- **npm**
+
+---
+
+## 📦 Installation & Setup
+
+1. Clone the repository:
+
+```bash
+git clone <https://github.com/Aswathrs2761/Event_hub_front_end>
+

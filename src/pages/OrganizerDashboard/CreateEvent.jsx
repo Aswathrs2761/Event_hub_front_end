@@ -170,17 +170,17 @@ function CreateEventForm() {
       };
 
 
-      console.log("Category:", category);
-      console.log("OtherCategory state:", otherCategory);
-      console.log("Category === 'Other'?", category === "Other");
-      console.log("Sending payload:", JSON.stringify(payload, null, 2));
+      // console.log("Category:", category);
+      // console.log("OtherCategory state:", otherCategory);
+      // console.log("Category === 'Other'?", category === "Other");
+      // console.log("Sending payload:", JSON.stringify(payload, null, 2));
       
       // Check if otherCategory is being added
-      if (category === "Other") {
-        console.log("Should have otherCategory in payload, value:", otherCategory);
-        console.log("Payload has otherCategory?", "otherCategory" in payload);
-        console.log("Payload.otherCategory =", payload.otherCategory);
-      }
+      // if (category === "Other") {
+      //   console.log("Should have otherCategory in payload, value:", otherCategory);
+      //   console.log("Payload has otherCategory?", "otherCategory" in payload);
+      //   console.log("Payload.otherCategory =", payload.otherCategory);
+      // }
 
       await axios.post(
         "https://event-hub-backend-uzcs.onrender.com/api/organizer/createEvent",

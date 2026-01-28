@@ -25,14 +25,14 @@ export default function Login() {
         return;
       }
 
-      console.log("🔐 Attempting login with:", { email: form.email, password: "****" });
+      // console.log("🔐 Attempting login with:", { email: form.email, password: "****" });
       
       const res = await API.post("/auth/login", {
         email: form.email.trim(),
         password: form.password
       });
 
-      console.log("✅ Login successful:", res.data);
+      // console.log("✅ Login successful:", res.data);
       
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
