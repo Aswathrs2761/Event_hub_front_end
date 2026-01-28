@@ -9,7 +9,7 @@ export default function RecentSales() {
     const fetchSales = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/payment/recent-sales",
+          "https://event-hub-backend-uzcs.onrender.com/api/payment/recent-sales",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

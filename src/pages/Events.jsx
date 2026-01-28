@@ -42,7 +42,7 @@ export default function Events() {
     try {
       setLoading(true);
       const res = await axios.get(
-        "http://localhost:5000/api/organizer/getallevents"
+        "https://event-hub-backend-uzcs.onrender.com/api/organizer/getallevents"
       );
 
       const eventsData = res.data || [];

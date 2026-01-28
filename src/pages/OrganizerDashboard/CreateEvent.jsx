@@ -11,7 +11,7 @@ const categories = [
   "Music", "Tech", "Business", "Sports", "Art", "Food", "Health", "Other"
 ];
 
-const ticketTypes = ["VIP", "Platinum", "Gold", "Silver"];
+const ticketTypes = ["VIP",  "Gold", "Silver"];
 
 export default function OrganizerDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -183,7 +183,7 @@ function CreateEventForm() {
       }
 
       await axios.post(
-        "http://localhost:5000/api/organizer/createEvent",
+        "https://event-hub-backend-uzcs.onrender.com/api/organizer/createEvent",
         payload,
         {
           headers: {

@@ -44,7 +44,7 @@ export default function EditEvent() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `http://localhost:5000/api/organizer/getEventsById/${id}`,
+          `https://event-hub-backend-uzcs.onrender.com/api/organizer/getEventsById/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -128,7 +128,7 @@ export default function EditEvent() {
       };
 
       await axios.put(
-        `http://localhost:5000/api/payment/edit-event/${id}`,
+        `https://event-hub-backend-uzcs.onrender.com/api/payment/edit-event/${id}`,
         payload,
         {
           headers: {

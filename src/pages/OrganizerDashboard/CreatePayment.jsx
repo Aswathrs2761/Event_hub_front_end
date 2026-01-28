@@ -33,7 +33,7 @@ function CreatePayment({
 
       // 1️⃣ Create PaymentIntent from backend
       const res = await axios.post(
-        "http://localhost:5000/api/payment/buy-Tickets",
+        "https://event-hub-backend-uzcs.onrender.com/api/payment/buy-Tickets",
         {
           eventId,
           ticketType,
@@ -64,7 +64,7 @@ function CreatePayment({
       if (result.paymentIntent.status === "succeeded") {
         // 3️⃣ Tell backend to save the ticket
         await axios.post(
-          "http://localhost:5000/api/payment/confirm-ticket",
+          "https://event-hub-backend-uzcs.onrender.com/api/payment/confirm-ticket",
           {
             eventId,
             ticketType,

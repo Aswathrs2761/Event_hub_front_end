@@ -17,7 +17,7 @@ const Ticket = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        "http://localhost:5000/api/payment/my-tickets",
+        "https://event-hub-backend-uzcs.onrender.com/api/payment/my-tickets",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -43,7 +43,7 @@ const Ticket = () => {
 
   try {
     await axios.delete(
-      `http://localhost:5000/api/payment/cancel-ticket/${ticketId}`,
+      `https://event-hub-backend-uzcs.onrender.com/api/payment/cancel-ticket/${ticketId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

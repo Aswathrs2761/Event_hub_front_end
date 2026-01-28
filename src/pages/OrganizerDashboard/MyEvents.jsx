@@ -15,7 +15,7 @@ export default function MyEvents() {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/payment/my-events", {
+        const res = await axios.get("https://event-hub-backend-uzcs.onrender.com/api/payment/my-events", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEvents(res.data.events || []);
@@ -33,7 +33,7 @@ export default function MyEvents() {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:5000/api/payment/suspend/${id}`,
+        `https://event-hub-backend-uzcs.onrender.com/api/payment/suspend/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

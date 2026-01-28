@@ -30,7 +30,7 @@ const ExploreCategory = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/organizer/getallevents");
+      const res = await axios.get("https://event-hub-backend-uzcs.onrender.com/api/organizer/getallevents");
       const allEvents = res.data || [];
 
       const categoryEvents = allEvents.filter(

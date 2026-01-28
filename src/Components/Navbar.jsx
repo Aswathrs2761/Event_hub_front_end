@@ -1,10 +1,14 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const nav = useNavigate();
   const { pathname } = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+const [loadingUser, setLoadingUser] = useState(true);
+
 
   const isLoggedIn = !!localStorage.getItem("token");
   const role = localStorage.getItem("role"); // "user", "organizer", or "admin"
@@ -34,6 +38,38 @@ const Navbar = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+
+  const getUserDetails = async () => {
+  try {
+    const res = await axios.get(
+      "https://event-hub-backend-uzcs.onrender.com/api/payment/users/detail",
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    setUserDetails(res.data.data);
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+  } finally {
+    setLoadingUser(false);
+  }
+};
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    setLoadingUser(true);
+    getUserDetails();
+  } else {
+    setUserDetails(null);
+    setLoadingUser(false);
+  }
+}, [isLoggedIn]);
+
 
   return (
     <>
@@ -277,11 +313,30 @@ const Navbar = () => {
                     <div className="text-lg text-purple-300 font-semibold flex items-center gap-2">
                       {isAdmin ? "🛡️ Admin" : isOrganizer ? "👔 Organizer" : "👤 User"}
                     </div>
+                   {loadingUser ? (
+  <div className="text-sm text-purple-300 font-semibold mt-3">
+    Loading...
+  </div>
+) : userDetails ? (
+  <>
+    <div className="text-sm text-purple-300 font-semibold flex items-center gap-2 mt-3">
+      {userDetails.name}
+    </div>
+    <div className="text-sm text-purple-300 font-semibold flex items-center gap-2 mt-1">
+      {userDetails.email}
+    </div>
+  </>
+) : (
+  <div className="text-sm text-purple-300 font-semibold mt-3">
+    User
+  </div>
+)}
                   </div>
                   <button
                     onClick={() => {
                       localStorage.removeItem("token");
                       localStorage.removeItem("role");
+                      setUserDetails(null);
                       nav("/login");
                       closeMobileMenu();
                     }}

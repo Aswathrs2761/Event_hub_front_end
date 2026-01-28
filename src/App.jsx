@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Slide, toast, ToastContainer, Zoom } from 'react-toastify';
 import Navbar from './Components/Navbar';
-import Footer from './Components/Footer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
 import Register from './pages/Register.jsx';
@@ -82,7 +81,9 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/register' element={<Register />} />
+          <Route path="/register" element={<Register role="user" />} />
+          <Route path="/register/admin" element={<Register role="admin" />} />
+          <Route path="/register/organizer" element={<Register role="organizer" />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password/:id/:token' element={<ResetPassword />} />
@@ -103,8 +104,6 @@ function App() {
           <Route path='/admin' element={<Admin/>} />
           
         </Routes>
-
-        <Footer />
       </BrowserRouter>
     </>
   );

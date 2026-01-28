@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/PathApi";
 import { toast } from "react-toastify";
 
-export default function Register() {
+export default function Register({ role  }) {
   const [data, setData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    role:  "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +31,8 @@ export default function Register() {
       return;
     }
 
+
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -40,6 +43,7 @@ export default function Register() {
         name,
         email,
         password, // only send password
+        role
       });
 
       toast.success("Registered successfully");

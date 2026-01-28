@@ -23,10 +23,10 @@ export default function PaymentInfo() {
         console.log(decoded);
 
         const [totalRes, ticketsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/payment/organizer-total", {
+          axios.get("https://event-hub-backend-uzcs.onrender.com/api/payment/organizer-total", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:5000/api/payment/tickets-sold", {
+          axios.get("https://event-hub-backend-uzcs.onrender.com/api/payment/tickets-sold", {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);

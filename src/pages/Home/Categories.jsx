@@ -27,7 +27,7 @@ export default function Categories() {
   const fetchEvents = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/organizer/getallevents"
+          "https://event-hub-backend-uzcs.onrender.com/api/organizer/getallevents"
         );
 
         // ✅ Safe fallback

@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/organizer/getallevents");
+        const response = await axios.get("https://event-hub-backend-uzcs.onrender.com/api/organizer/getallevents");
         const events = response.data || [];
         setStats({
           totalEvents: events.length,

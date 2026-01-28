@@ -23,7 +23,7 @@ const EventDetail = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:5000/api/organizer/getEventsById/${id}`
+          `https://event-hub-backend-uzcs.onrender.com/api/organizer/getEventsById/${id}`
         );
         setEvent(res.data);
       } catch (error) {

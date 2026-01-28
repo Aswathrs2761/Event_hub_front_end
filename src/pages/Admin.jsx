@@ -54,8 +54,8 @@ const Admin = () => {
     try {
       setLoading(true);
       const [dashboardRes, statsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/admin/dashboard", { headers }),
-        axios.get("http://localhost:5000/api/admin/reports/stats", { headers }),
+        axios.get("https://event-hub-backend-uzcs.onrender.com/api/admin/dashboard", { headers }),
+        axios.get("https://event-hub-backend-uzcs.onrender.com/api/admin/reports/stats", { headers }),
       ]);
 
       setOverview(dashboardRes.data.data);
@@ -71,7 +71,7 @@ const Admin = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/admin/users?page=${userPage}&limit=10&search=${userSearch}`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/users?page=${userPage}&limit=10&search=${userSearch}`,
         { headers }
       );
       setUsers(res.data.data);
@@ -85,7 +85,7 @@ const Admin = () => {
   const fetchEvents = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/admin/events?page=${eventPage}&limit=10${
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/events?page=${eventPage}&limit=10${
           eventStatus ? `&status=${eventStatus}` : ""
         }`,
         { headers }
@@ -101,7 +101,7 @@ const Admin = () => {
   const fetchTransactions = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/admin/transactions?page=${txnPage}&limit=10${
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/transactions?page=${txnPage}&limit=10${
           txnStatus ? `&status=${txnStatus}` : ""
         }`,
         { headers }
@@ -118,7 +118,7 @@ const Admin = () => {
     try {
       const newStatus = currentStatus === "active" ? "suspended" : "active";
       await axios.patch(
-        `http://localhost:5000/api/admin/users/${userId}/status`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/users/${userId}/status`,
         { status: newStatus },
         { headers }
       );
@@ -133,7 +133,7 @@ const Admin = () => {
   const deleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/users/${userId}`, {
+      await axios.delete(`https://event-hub-backend-uzcs.onrender.com/api/admin/users/${userId}`, {
         headers,
       });
       toast.success("User deleted successfully");
@@ -147,7 +147,7 @@ const Admin = () => {
   const approveEvent = async (eventId) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/events/${eventId}/status`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${eventId}/status`,
         { status: "approved" },
         { headers }
       );
@@ -162,7 +162,7 @@ const Admin = () => {
   const deleteEvent = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/events/${eventId}`, {
+      await axios.delete(`https://event-hub-backend-uzcs.onrender.com/api/admin/events/${eventId}`, {
         headers,
       });
       toast.success("Event deleted successfully");
@@ -178,7 +178,7 @@ const Admin = () => {
       return;
     try {
       await axios.patch(
-        `http://localhost:5000/api/admin/transactions/${txnId}/refund`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/transactions/${txnId}/refund`,
         {},
         { headers }
       );
@@ -664,7 +664,7 @@ const Admin = () => {
                               if (!window.confirm("Are you sure you want to reject this event?")) return;
                               try {
                                 await axios.put(
-                                  `http://localhost:5000/api/admin/events/${event._id}/status`,
+                                  `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${event._id}/status`,
                                   { status: "rejected" },
                                   { headers }
                                 );
@@ -686,7 +686,7 @@ const Admin = () => {
                               if (!window.confirm("Are you sure you want to suspend this event?")) return;
                               try {
                                 await axios.put(
-                                  `http://localhost:5000/api/admin/events/${event._id}/status`,
+                                  `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${event._id}/status`,
                                   { status: "suspended" },
                                   { headers }
                                 );
