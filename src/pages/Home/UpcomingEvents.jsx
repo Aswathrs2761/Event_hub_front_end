@@ -103,7 +103,7 @@ export default function UpcomingEvents() {
             {/* Image */}
             <div className="relative h-56 overflow-hidden">
               <img
-                src={event.image || '/placeholder-event.jpg'}
+                src={event.imageUrl || '/placeholder-event.jpg'}
                 alt={event.eventtitle}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
