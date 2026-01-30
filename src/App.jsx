@@ -23,6 +23,7 @@ import RecentSales from './pages/OrganizerDashboard/RecentSales.jsx';
 import CreateEvent from './pages/OrganizerDashboard/CreateEvent.jsx';
 import Ticket from './pages/OrganizerDashboard/Ticket.jsx';
 import Admin from './pages/Admin.jsx';
+import Footer from './Components/Footer.jsx';
 
 function App() {
 
@@ -104,6 +105,9 @@ function App() {
           <Route path='/admin' element={<Admin/>} />
           
         </Routes>
+        <div>
+          <Footer />
+        </div>
       </BrowserRouter>
     </>
   );
