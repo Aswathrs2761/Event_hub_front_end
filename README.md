@@ -69,6 +69,22 @@ This repository contains the **frontend** of the application built with **React 
 
 ---
 
+## credentials for testing
+
+- Admin User
+  - Email: aswath123@gmail.com
+    - Password: 123456
+
+- Organizer User
+    - Email:Aswath@gmail.com
+    - Password: 123456
+
+- Regular User
+    - Email: aswath12345@gmail.com
+    - Password: 123456
+
+---
+
 ## 📦 Installation & Setup
 
 1. Clone the repository:
