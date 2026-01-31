@@ -17,7 +17,7 @@ This repository contains the **frontend** of the application built with **React 
 - Cancel tickets and get automatic refunds
 - Email notification on refund
 
-# http://localhost:5173/register
+# https://eventhubz.netlify.app/register
 
 - can register has user
 
@@ -34,7 +34,7 @@ This repository contains the **frontend** of the application built with **React 
 - Cancel tickets and get automatic refunds
 - Email notification on refund
 
-# http://localhost:5173/register/organizer
+# https://eventhubz.netlify.app/register/organizer
 
 - can register has organizer
 
@@ -45,7 +45,7 @@ This repository contains the **frontend** of the application built with **React 
 - Approve or reject events
 - Full access to system data
 
-# http://localhost:5173/register/admin
+# https://eventhubz.netlify.app/register/admin
 
 - can register has admin
 
