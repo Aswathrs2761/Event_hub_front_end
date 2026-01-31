@@ -208,9 +208,9 @@ const EventDetail = () => {
             {selectedTicket && (
               <div className="mb-4 sm:mb-6">
                 <div className="flex items-center justify-between bg-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 border border-white/10">
-                  <button onClick={decreaseQty} className="w-8 h-8 flex items-center justify-center">−</button>
+                  <button onClick={decreaseQty} className="w-12 h-8 text-3xl flex items-center font-extrabold text-pink-500 justify-center">−</button>
                   <span className="text-white font-bold text-sm sm:text-base">{quantity}</span>
-                  <button onClick={increaseQty} className="w-8 h-8 flex items-center justify-center">+</button>
+                  <button onClick={increaseQty} className="w-12 h-8 text-3xl  flex items-center font-extrabold text-pink-500 justify-center">+</button>
                 </div>
               </div>
             )}

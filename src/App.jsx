@@ -88,8 +88,8 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password/:id/:token' element={<ResetPassword />} />
-          <Route path='/Events' element={<Events />} />
-          <Route path='/Event/:id' element={<EventDetail />} />
+          <Route path='/events' element={<Events />} />
+          <Route path='/event/:id' element={<EventDetail />} />
           <Route path='/organizer' element={<OrganizerDashboard />} />
           <Route path='/CreatePayment' element={
             <Elements stripe={stripePromise}>

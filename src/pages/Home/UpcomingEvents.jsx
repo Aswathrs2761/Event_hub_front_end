@@ -80,7 +80,7 @@ export default function UpcomingEvents() {
 
         <button
           type="button"
-          onClick={() => navigate("/Events")}
+          onClick={() => navigate("/events")}
           className="group px-6 py-3 rounded-2xl border border-white/10 hover:bg-white/5 hover:border-purple-500/30 transition-all duration-300 text-white font-medium"
         >
           <div className="flex items-center gap-2">
@@ -239,7 +239,7 @@ export default function UpcomingEvents() {
 
             <button
               type="button"
-              onClick={() => navigate("/Events")}
+              onClick={() => navigate("/events")}
               className="px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg"
             >
               Browse All Events

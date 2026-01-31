@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const Admin = () => {
   const nav = useNavigate();
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [overview, setOverview] = useState(null);
   const [users, setUsers] = useState([]);
@@ -13,7 +14,6 @@ const Admin = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Pagination & Filters
   const [userPage, setUserPage] = useState(1);
   const [eventPage, setEventPage] = useState(1);
   const [txnPage, setTxnPage] = useState(1);
@@ -24,7 +24,6 @@ const Admin = () => {
   const [totalEventPages, setTotalEventPages] = useState(1);
   const [totalTxnPages, setTotalTxnPages] = useState(1);
 
-  // Modal States
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedTxn, setSelectedTxn] = useState(null);
@@ -37,6 +36,9 @@ const Admin = () => {
     return null;
   }
 
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
+
   useEffect(() => {
     fetchAllData();
   }, []);
@@ -45,23 +47,33 @@ const Admin = () => {
     if (activeTab === "users") fetchUsers();
     if (activeTab === "events") fetchEvents();
     if (activeTab === "transactions") fetchTransactions();
-  }, [activeTab, userPage, userSearch, eventPage, eventStatus, txnPage, txnStatus]);
-
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
+  }, [
+    activeTab,
+    userPage,
+    userSearch,
+    eventPage,
+    eventStatus,
+    txnPage,
+    txnStatus,
+  ]);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
       const [dashboardRes, statsRes] = await Promise.all([
-        axios.get("https://event-hub-backend-uzcs.onrender.com/api/admin/dashboard", { headers }),
-        axios.get("https://event-hub-backend-uzcs.onrender.com/api/admin/reports/stats", { headers }),
+        axios.get(
+          "https://event-hub-backend-uzcs.onrender.com/api/admin/dashboard",
+          { headers }
+        ),
+        axios.get(
+          "https://event-hub-backend-uzcs.onrender.com/api/admin/reports/stats",
+          { headers }
+        ),
       ]);
 
       setOverview(dashboardRes.data.data);
       setStats(statsRes.data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    } catch {
       toast.error("Failed to load dashboard data");
     } finally {
       setLoading(false);
@@ -76,8 +88,7 @@ const Admin = () => {
       );
       setUsers(res.data.data);
       setTotalUserPages(res.data.pagination.pages);
-    } catch (error) {
-      console.error("Error fetching users:", error);
+    } catch {
       toast.error("Failed to load users");
     }
   };
@@ -92,8 +103,7 @@ const Admin = () => {
       );
       setEvents(res.data.data);
       setTotalEventPages(res.data.pagination.pages);
-    } catch (error) {
-      console.error("Error fetching events:", error);
+    } catch {
       toast.error("Failed to load events");
     }
   };
@@ -108,454 +118,353 @@ const Admin = () => {
       );
       setTransactions(res.data.data);
       setTotalTxnPages(res.data.pagination.pages);
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
+    } catch {
       toast.error("Failed to load transactions");
     }
   };
 
-  const toggleUserStatus = async (userId, currentStatus) => {
+  const toggleUserStatus = async (id, status) => {
     try {
-      const newStatus = currentStatus === "active" ? "suspended" : "active";
       await axios.patch(
-        `https://event-hub-backend-uzcs.onrender.com/api/admin/users/${userId}/status`,
-        { status: newStatus },
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/users/${id}/status`,
+        { status: status === "active" ? "suspended" : "active" },
         { headers }
       );
-      toast.success(`User ${newStatus}`);
+      toast.success("User status updated");
       fetchUsers();
-    } catch (error) {
-      console.error("Error updating user:", error);
-      toast.error("Failed to update user status");
+    } catch {
+      toast.error("Failed to update user");
     }
   };
 
-  const deleteUser = async (userId) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
+  const deleteUser = async (id) => {
+    if (!window.confirm("Delete this user?")) return;
     try {
-      await axios.delete(`https://event-hub-backend-uzcs.onrender.com/api/admin/users/${userId}`, {
-        headers,
-      });
-      toast.success("User deleted successfully");
+      await axios.delete(
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/users/${id}`,
+        { headers }
+      );
+      toast.success("User deleted");
       fetchUsers();
-    } catch (error) {
-      console.error("Error deleting user:", error);
+    } catch {
       toast.error("Failed to delete user");
     }
   };
 
-  const approveEvent = async (eventId) => {
+  const approveEvent = async (id) => {
     try {
       await axios.put(
-        `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${eventId}/status`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${id}/status`,
         { status: "approved" },
         { headers }
       );
       toast.success("Event approved");
       fetchEvents();
-    } catch (error) {
-      console.error("Error approving event:", error);
+    } catch {
       toast.error("Failed to approve event");
     }
   };
 
-  const deleteEvent = async (eventId) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
+  const deleteEvent = async (id) => {
+    if (!window.confirm("Delete this event?")) return;
     try {
-      await axios.delete(`https://event-hub-backend-uzcs.onrender.com/api/admin/events/${eventId}`, {
-        headers,
-      });
-      toast.success("Event deleted successfully");
+      await axios.delete(
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${id}`,
+        { headers }
+      );
+      toast.success("Event deleted");
       fetchEvents();
-    } catch (error) {
-      console.error("Error deleting event:", error);
+    } catch {
       toast.error("Failed to delete event");
     }
   };
 
-  const processRefund = async (txnId) => {
-    if (!window.confirm("Are you sure you want to process this refund?"))
-      return;
+  const processRefund = async (id) => {
+    if (!window.confirm("Process refund?")) return;
     try {
       await axios.patch(
-        `https://event-hub-backend-uzcs.onrender.com/api/admin/transactions/${txnId}/refund`,
+        `https://event-hub-backend-uzcs.onrender.com/api/admin/transactions/${id}/refund`,
         {},
         { headers }
       );
-      toast.success("Refund processed successfully");
+      toast.success("Refund processed");
       fetchTransactions();
-    } catch (error) {
-      console.error("Error processing refund:", error);
+    } catch {
       toast.error("Failed to process refund");
     }
   };
 
-  const StatCard = ({ icon, label, value, color }) => (
-    <div className="bg-gradient-to-br from-white/5 to-white/0 border border-white/10 rounded-xl p-6 hover:border-white/20 transition">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-gray-400 text-xs font-medium mb-2">{label}</p>
-          <h3 className="text-2xl font-bold text-white">{value}</h3>
-        </div>
-        <div
-          className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${color}`}
-        >
-          {icon}
-        </div>
-      </div>
+  const tabs = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "users", label: "Users" },
+    { id: "events", label: "Events" },
+    { id: "transactions", label: "Transactions" },
+    { id: "reports", label: "Reports" },
+  ];
+
+  const Card = ({ children }) => (
+    <div className="rounded-2xl border border-purple-500/10 bg-gradient-to-br from-[#0c0816] via-[#120a22] to-[#0c0816] shadow-xl shadow-purple-900/40">
+      {children}
     </div>
   );
 
-  const tabs = [
-    { id: "dashboard", label: "📊 Dashboard", icon: "📊" },
-    { id: "users", label: "👥 Users", icon: "👥" },
-    { id: "events", label: "🎪 Events", icon: "🎪" },
-    { id: "transactions", label: "💳 Transactions", icon: "💳" },
-    { id: "reports", label: "📈 Reports", icon: "📈" },
-  ];
-
   if (loading && activeTab === "dashboard") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0f0f14] via-[#111118] to-[#09090d] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0a0714] via-[#140a22] to-[#0a0714]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
-          <p className="text-gray-400 mt-4">Loading admin dashboard...</p>
+          <div className="w-12 h-12 border-b-2 border-pink-500 rounded-full animate-spin mx-auto" />
+          <p className="text-purple-200/70 mt-4">
+            Loading admin dashboard…
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f0f14] via-[#111118] to-[#09090d] py-8">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0714] via-[#140a22] to-[#0a0714]">
+      <div className="max-w-7xl mx-auto px-6 py-10">
+
         {/* Header */}
-        <div className="mb-8 flex justify-between items-center">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
               Admin Dashboard
             </h1>
-            <p className="text-gray-400">Complete platform management</p>
+            <p className="text-purple-200/60 mt-1">
+              Manage users, events, payments and platform health
+            </p>
           </div>
+
           <button
             onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("role");
-              localStorage.removeItem("userName");
+              localStorage.clear();
               nav("/login");
             }}
-            className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:scale-105 transition"
+            className="px-6 py-3 rounded-xl text-sm font-semibold
+            bg-gradient-to-r from-pink-500 to-purple-600
+            text-white shadow-lg shadow-pink-500/20 hover:shadow-pink-500/40 transition"
           >
-            🚪 Logout
+            Logout
           </button>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-4 border-b border-white/10">
-          {tabs.map((tab) => (
+        {/* Tabs */}
+        <div className="flex gap-2 overflow-x-auto mb-10">
+          {tabs.map((t) => (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap ${
-                activeTab === tab.id
-                  ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-purple-500/50"
-                  : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition
+              ${
+                activeTab === t.id
+                  ? "bg-gradient-to-r from-pink-500/30 to-purple-500/30 border border-pink-400/30 text-white shadow"
+                  : "border border-white/10 text-purple-200/70 hover:text-white hover:border-purple-400/30 hover:bg-purple-500/10"
               }`}
             >
-              {tab.label}
+              {t.label}
             </button>
           ))}
         </div>
 
-        {/* DASHBOARD TAB */}
-        {activeTab === "dashboard" && (
+        {/* ---------------- DASHBOARD ---------------- */}
+        {activeTab === "dashboard" && overview && stats && (
           <div className="space-y-8">
-            {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {overview && (
-                <>
-                  <StatCard
-                    icon="👥"
-                    label="Total Users"
-                    value={overview.totalUsers}
-                    color="bg-blue-500/20 text-blue-400"
-                  />
-                  <StatCard
-                    icon="🎪"
-                    label="Total Events"
-                    value={overview.totalEvents}
-                    color="bg-pink-500/20 text-pink-400"
-                  />
-                  <StatCard
-                    icon="🎫"
-                    label="Total Tickets"
-                    value={overview.totalTickets}
-                    color="bg-green-500/20 text-green-400"
-                  />
-                  <StatCard
-                    icon="💰"
-                    label="Total Revenue"
-                    value={`₹${(overview.totalRevenue || 0).toLocaleString()}`}
-                    color="bg-yellow-500/20 text-yellow-400"
-                  />
-                </>
-              )}
+              {[
+                ["Total Users", overview.totalUsers],
+                ["Total Events", overview.totalEvents],
+                ["Total Tickets", overview.totalTickets],
+                ["Total Revenue", `₹${overview.totalRevenue || 0}`],
+              ].map((c, i) => (
+                <Card key={i}>
+                  <div className="p-6">
+                    <p className="text-xs uppercase tracking-wider text-purple-200/60">
+                      {c[0]}
+                    </p>
+                    <p className="text-2xl font-bold text-white mt-2">
+                      {c[1]}
+                    </p>
+                  </div>
+                </Card>
+              ))}
             </div>
 
-            {/* Overview Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {overview && (
-                <div className="space-y-4">
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <h2 className="text-xl font-bold text-white mb-4">
-                      Events Status
-                    </h2>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between mb-2">
-                          <span className="text-gray-400">Approved</span>
-                          <span className="text-green-400 font-semibold">
-                            {overview.approvedEvents}
-                          </span>
-                        </div>
-                        <div className="w-full bg-white/5 rounded-full h-2">
-                          <div
-                            className="bg-green-500 h-2 rounded-full"
-                            style={{
-                              width: `${
-                                overview.totalEvents > 0
-                                  ? (overview.approvedEvents /
-                                      overview.totalEvents) *
-                                    100
-                                  : 0
-                              }%`,
-                            }}
-                          />
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card>
+                <div className="p-6 space-y-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    Event Status
+                  </h3>
+
+                  {[
+                    ["Approved", overview.approvedEvents, "bg-emerald-500"],
+                    ["Pending", overview.pendingEvents, "bg-amber-500"],
+                  ].map((row) => (
+                    <div key={row[0]}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-purple-200/60">{row[0]}</span>
+                        <span className="text-white">{row[1]}</span>
                       </div>
-                      <div>
-                        <div className="flex justify-between mb-2">
-                          <span className="text-gray-400">Pending</span>
-                          <span className="text-yellow-400 font-semibold">
-                            {overview.pendingEvents}
-                          </span>
-                        </div>
-                        <div className="w-full bg-white/5 rounded-full h-2">
-                          <div
-                            className="bg-yellow-500 h-2 rounded-full"
-                            style={{
-                              width: `${
-                                overview.totalEvents > 0
-                                  ? (overview.pendingEvents /
-                                      overview.totalEvents) *
-                                    100
-                                  : 0
-                              }%`,
-                            }}
-                          />
-                        </div>
+                      <div className="h-2 bg-white/5 rounded-full">
+                        <div
+                          className={`h-2 rounded-full ${row[2]}`}
+                          style={{
+                            width: `${
+                              overview.totalEvents
+                                ? (row[1] / overview.totalEvents) * 100
+                                : 0
+                            }%`,
+                          }}
+                        />
                       </div>
                     </div>
-                  </div>
+                  ))}
+                </div>
+              </Card>
 
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <h2 className="text-xl font-bold text-white mb-4">
-                      Ticket Success Rate
-                    </h2>
-                    <div className="flex justify-between mb-3">
-                      <span className="text-gray-400">Success Rate</span>
-                      <span className="text-purple-400 font-semibold">
-                        {overview.totalTickets > 0
-                          ? (
-                              (overview.successfulTickets /
+              <Card>
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-white mb-4">
+                    Ticket Success Rate
+                  </h3>
+                  <div className="flex justify-between mb-2 text-sm">
+                    <span className="text-purple-200/60">
+                      Success rate
+                    </span>
+                    <span className="text-white">
+                      {overview.totalTickets
+                        ? (
+                            (overview.successfulTickets /
+                              overview.totalTickets) *
+                            100
+                          ).toFixed(1)
+                        : 0}
+                      %
+                    </span>
+                  </div>
+                  <div className="h-3 rounded-full bg-white/5">
+                    <div
+                      className="h-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600"
+                      style={{
+                        width: `${
+                          overview.totalTickets
+                            ? (overview.successfulTickets /
                                 overview.totalTickets) *
                               100
-                            ).toFixed(1)
-                          : 0}
-                        %
-                      </span>
-                    </div>
-                    <div className="w-full bg-white/5 rounded-full h-3">
-                      <div
-                        className="bg-gradient-to-r from-purple-500 to-pink-600 h-3 rounded-full"
-                        style={{
-                          width: `${
-                            overview.totalTickets > 0
-                              ? (overview.successfulTickets /
-                                  overview.totalTickets) *
-                                100
-                              : 0
-                          }%`,
-                        }}
-                      />
-                    </div>
+                            : 0
+                        }%`,
+                      }}
+                    />
                   </div>
                 </div>
-              )}
+              </Card>
 
-              {/* Stats Grid */}
-              {stats && (
-                <div className="lg:col-span-2 bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                  <h2 className="text-xl font-bold text-white mb-6">
-                    Platform Statistics
-                  </h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">Total Users</p>
-                      <p className="text-2xl font-bold text-blue-400">
-                        {stats.totalUsers}
+              <Card>
+                <div className="p-6 grid grid-cols-2 gap-4">
+                  {[
+                    ["Total Users", stats.totalUsers],
+                    ["Active Events", stats.activeEvents],
+                    ["Total Tickets", stats.totalTickets],
+                    ["Pending Events", stats.pendingEvents],
+                    ["Total Events", stats.totalEvents],
+                    ["Revenue", `₹${stats.totalRevenue || 0}`],
+                  ].map((s, i) => (
+                    <div
+                      key={i}
+                      className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                    >
+                      <p className="text-xs text-purple-200/60">
+                        {s[0]}
+                      </p>
+                      <p className="text-lg font-semibold text-white mt-1">
+                        {s[1]}
                       </p>
                     </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">Active Events</p>
-                      <p className="text-2xl font-bold text-green-400">
-                        {stats.activeEvents}
-                      </p>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">
-                        Total Tickets
-                      </p>
-                      <p className="text-2xl font-bold text-purple-400">
-                        {stats.totalTickets}
-                      </p>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">
-                        Pending Events
-                      </p>
-                      <p className="text-2xl font-bold text-yellow-400">
-                        {stats.pendingEvents}
-                      </p>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">Total Events</p>
-                      <p className="text-2xl font-bold text-pink-400">
-                        {stats.totalEvents}
-                      </p>
-                    </div>
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                      <p className="text-gray-400 text-sm mb-2">Total Revenue</p>
-                      <p className="text-xl font-bold text-orange-400">
-                        ₹{(stats.totalRevenue || 0).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              )}
+              </Card>
             </div>
           </div>
         )}
 
-        {/* USERS TAB */}
+        {/* ---------------- USERS ---------------- */}
         {activeTab === "users" && (
           <div className="space-y-6">
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Search by name or email..."
-                value={userSearch}
-                onChange={(e) => {
-                  setUserSearch(e.target.value);
-                  setUserPage(1);
-                }}
-                className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
-              />
-            </div>
+            <input
+              value={userSearch}
+              onChange={(e) => {
+                setUserSearch(e.target.value);
+                setUserPage(1);
+              }}
+              placeholder="Search users…"
+              className="w-full md:max-w-md px-4 py-3 rounded-xl
+              bg-white/5 border border-white/10 text-white
+              focus:outline-none focus:border-purple-400/40"
+            />
 
-            <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6 overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Name
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Email
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Role
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Status
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Joined
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user) => (
-                    <tr
-                      key={user._id}
-                      className="border-b border-white/5 hover:bg-white/5 transition"
-                    >
-                      <td className="py-4 px-4 text-white font-medium text-sm">
-                        {user.name}
-                      </td>
-                      <td className="py-4 px-4 text-gray-300 text-sm">
-                        {user.email}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            user.role === "admin"
-                              ? "bg-purple-500/20 text-purple-400"
-                              : user.role === "organizer"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-gray-500/20 text-gray-400"
-                          }`}
-                        >
-                          {user.role || "user"}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            user.status === "active"
-                              ? "bg-green-500/20 text-green-400"
-                              : "bg-red-500/20 text-red-400"
-                          }`}
-                        >
-                          {user.status}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-gray-400 text-sm">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="py-4 px-4 flex gap-2">
-                        <button
-                          onClick={() => setSelectedUser(user)}
-                          className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 transition text-xs font-semibold"
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() =>
-                            toggleUserStatus(user._id, user.status)
-                          }
-                          className={`px-3 py-1 rounded hover:opacity-80 transition text-xs font-semibold ${
-                            user.status === "active"
-                              ? "bg-yellow-500/20 text-yellow-400"
-                              : "bg-green-500/20 text-green-400"
-                          }`}
-                        >
-                          {user.status === "active" ? "Suspend" : "Activate"}
-                        </button>
-                        <button
-                          onClick={() => deleteUser(user._id)}
-                          className="px-3 py-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition text-xs font-semibold"
-                        >
-                          Delete
-                        </button>
-                      </td>
+            <Card>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left text-xs uppercase tracking-wider text-purple-200/60 border-b border-white/10">
+                      <th className="p-4">Name</th>
+                      <th className="p-4">Email</th>
+                      <th className="p-4">Role</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4">Joined</th>
+                      <th className="p-4">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {users.map((u) => (
+                      <tr
+                        key={u._id}
+                        className="border-b border-white/5 hover:bg-white/[0.03]"
+                      >
+                        <td className="p-4 text-white">{u.name}</td>
+                        <td className="p-4 text-purple-200/70">
+                          {u.email}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {u.role}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {u.status}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {new Date(u.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="p-4 flex gap-2 flex-wrap">
+                          <button
+                            onClick={() => setSelectedUser(u)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-blue-400/30 text-blue-300 hover:bg-blue-500/10"
+                          >
+                            View
+                          </button>
+                          <button
+                            onClick={() =>
+                              toggleUserStatus(u._id, u.status)
+                            }
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-amber-400/30 text-amber-300 hover:bg-amber-500/10"
+                          >
+                            {u.status === "active"
+                              ? "Suspend"
+                              : "Activate"}
+                          </button>
+                          <button
+                            onClick={() => deleteUser(u._id)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-rose-400/30 text-rose-300 hover:bg-rose-500/10"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
 
             {totalUserPages > 1 && (
               <div className="flex justify-center gap-2">
@@ -563,10 +472,11 @@ const Admin = () => {
                   <button
                     key={i}
                     onClick={() => setUserPage(i + 1)}
-                    className={`px-4 py-2 rounded-lg transition ${
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold
+                    ${
                       userPage === i + 1
-                        ? "bg-purple-600 text-white"
-                        : "bg-white/10 text-gray-300 hover:bg-white/20"
+                        ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white"
+                        : "border border-white/10 text-purple-200/70 hover:bg-purple-500/10"
                     }`}
                   >
                     {i + 1}
@@ -577,554 +487,303 @@ const Admin = () => {
           </div>
         )}
 
-        {/* EVENTS TAB */}
+        {/* ---------------- EVENTS ---------------- */}
         {activeTab === "events" && (
           <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <label className="text-gray-400 font-semibold text-sm">Filter by Status:</label>
-              <select
-                value={eventStatus}
-                onChange={(e) => {
-                  setEventStatus(e.target.value);
-                  setEventPage(1);
-                }}
-                className="px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/50 rounded-lg text-white focus:outline-none focus:border-purple-400 hover:border-purple-400/70 transition font-semibold"
-              >
-                <option value="" className="bg-[#1a1a24]">All Status</option>
-                <option value="pending" className="bg-[#1a1a24]">Pending</option>
-                <option value="approved" className="bg-[#1a1a24]">Approved</option>
-                <option value="rejected" className="bg-[#1a1a24]">Rejected</option>
-                <option value="suspended" className="bg-[#1a1a24]">Suspended</option>
-              </select>
-            </div>
+            <select
+              value={eventStatus}
+              onChange={(e) => {
+                setEventStatus(e.target.value);
+                setEventPage(1);
+              }}
+              className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-purple-400/40"
+            >
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="suspended">Suspended</option>
+            </select>
 
-            <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6 overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Event Title
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Organizer
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Status
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((event) => (
-                    <tr
-                      key={event._id}
-                      className="border-b border-white/5 hover:bg-white/5 transition"
-                    >
-                      <td className="py-4 px-4 text-white font-medium text-sm">
-                        {event.eventtitle}
-                      </td>
-                      <td className="py-4 px-4 text-gray-300 text-sm">
-                        {event.user?.name || "N/A"}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            event.status === "approved"
-                              ? "bg-green-500/20 text-green-400"
-                              : event.status === "pending"
-                              ? "bg-yellow-500/20 text-yellow-400"
-                              : event.status === "suspended"
-                              ? "bg-red-500/20 text-red-400"
-                              : "bg-gray-500/20 text-gray-400"
-                          }`}
-                        >
-                          {event.status}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 flex gap-2 flex-wrap">
-                        <button
-                          onClick={() => setSelectedEvent(event)}
-                          className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 transition text-xs font-semibold"
-                        >
-                          View
-                        </button>
-                        {(event.status === "pending" || event.status === "approve") && (
-                          <button
-                            onClick={() => approveEvent(event._id)}
-                            className="px-3 py-1 bg-green-500/20 text-green-400 rounded hover:bg-green-500/30 transition text-xs font-semibold"
-                          >
-                            ✓ Approve
-                          </button>
-                        )}
-                        {(event.status === "pending" || event.status === "approve") && (
-                          <button
-                            onClick={async () => {
-                              if (!window.confirm("Are you sure you want to reject this event?")) return;
-                              try {
-                                await axios.put(
-                                  `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${event._id}/status`,
-                                  { status: "rejected" },
-                                  { headers }
-                                );
-                                toast.success("Event rejected");
-                                fetchEvents();
-                              } catch (error) {
-                                console.error("Error rejecting event:", error);
-                                toast.error("Failed to reject event");
-                              }
-                            }}
-                            className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded hover:bg-orange-500/30 transition text-xs font-semibold"
-                          >
-                            ✕ Reject
-                          </button>
-                        )}
-                        {event.status !== "suspended" && (
-                          <button
-                            onClick={async () => {
-                              if (!window.confirm("Are you sure you want to suspend this event?")) return;
-                              try {
-                                await axios.put(
-                                  `https://event-hub-backend-uzcs.onrender.com/api/admin/events/${event._id}/status`,
-                                  { status: "suspended" },
-                                  { headers }
-                                );
-                                toast.success("Event suspended");
-                                fetchEvents();
-                              } catch (error) {
-                                console.error("Error suspending event:", error);
-                                toast.error("Failed to suspend event");
-                              }
-                            }}
-                            className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded hover:bg-yellow-500/30 transition text-xs font-semibold"
-                          >
-                            ⏸ Suspend
-                          </button>
-                        )}
-                        <button
-                          onClick={() => deleteEvent(event._id)}
-                          className="px-3 py-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition text-xs font-semibold"
-                        >
-                          Delete
-                        </button>
-                      </td>
+            <Card>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left text-xs uppercase tracking-wider text-purple-200/60 border-b border-white/10">
+                      <th className="p-4">Title</th>
+                      <th className="p-4">Organizer</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {events.map((e) => (
+                      <tr
+                        key={e._id}
+                        className="border-b border-white/5 hover:bg-white/[0.03]"
+                      >
+                        <td className="p-4 text-white">
+                          {e.eventtitle}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {e.user?.name || "N/A"}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {e.status}
+                        </td>
+                        <td className="p-4 flex gap-2 flex-wrap">
+                          <button
+                            onClick={() => setSelectedEvent(e)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-blue-400/30 text-blue-300 hover:bg-blue-500/10"
+                          >
+                            View
+                          </button>
 
-            {totalEventPages > 1 && (
-              <div className="flex justify-center gap-2">
-                {[...Array(totalEventPages)].map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setEventPage(i + 1)}
-                    className={`px-4 py-2 rounded-lg transition ${
-                      eventPage === i + 1
-                        ? "bg-purple-600 text-white"
-                        : "bg-white/10 text-gray-300 hover:bg-white/20"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
+                          {(e.status === "pending" ||
+                            e.status === "approve") && (
+                            <button
+                              onClick={() => approveEvent(e._id)}
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-400/30 text-emerald-300 hover:bg-emerald-500/10"
+                            >
+                              Approve
+                            </button>
+                          )}
+
+                          <button
+                            onClick={() => deleteEvent(e._id)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-rose-400/30 text-rose-300 hover:bg-rose-500/10"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </Card>
           </div>
         )}
 
-        {/* TRANSACTIONS TAB */}
+        {/* ---------------- TRANSACTIONS ---------------- */}
         {activeTab === "transactions" && (
           <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <label className="text-gray-400 font-semibold text-sm">Filter by Status:</label>
-              <select
-                value={txnStatus}
-                onChange={(e) => {
-                  setTxnStatus(e.target.value);
-                  setTxnPage(1);
-                }}
-                className="px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/50 rounded-lg text-white focus:outline-none focus:border-purple-400 hover:border-purple-400/70 transition font-semibold"
-              >
-                <option value="" className="bg-[#1a1a24]">All Status</option>
-                <option value="success" className="bg-[#1a1a24]">Success</option>
-                <option value="pending" className="bg-[#1a1a24]">Pending</option>
-                <option value="failed" className="bg-[#1a1a24]">Failed</option>
-                <option value="refunded" className="bg-[#1a1a24]">Refunded</option>
-              </select>
-            </div>
+            <select
+              value={txnStatus}
+              onChange={(e) => {
+                setTxnStatus(e.target.value);
+                setTxnPage(1);
+              }}
+              className="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-purple-400/40"
+            >
+              <option value="">All Status</option>
+              <option value="success">Success</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
+            </select>
 
-            <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6 overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      User
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Event
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Amount
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Status
-                    </th>
-                    <th className="text-left py-4 px-4 text-gray-400 font-semibold text-sm">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((txn) => (
-                    <tr
-                      key={txn._id}
-                      className="border-b border-white/5 hover:bg-white/5 transition"
-                    >
-                      <td className="py-4 px-4 text-white font-medium text-sm">
-                        {txn.user?.name || "N/A"}
-                      </td>
-                      <td className="py-4 px-4 text-gray-300 text-sm">
-                        {txn.event?.eventtitle || "N/A"}
-                      </td>
-                      <td className="py-4 px-4 text-white font-semibold text-sm">
-                        ₹{txn.amount}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            txn.status === "success"
-                              ? "bg-green-500/20 text-green-400"
-                              : txn.status === "pending"
-                              ? "bg-yellow-500/20 text-yellow-400"
-                              : txn.status === "refunded"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-red-500/20 text-red-400"
-                          }`}
-                        >
-                          {txn.status}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 flex gap-2">
-                        <button
-                          onClick={() => setSelectedTxn(txn)}
-                          className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 transition text-xs font-semibold"
-                        >
-                          View
-                        </button>
-                        {txn.status === "success" && (
-                          <button
-                            onClick={() => processRefund(txn._id)}
-                            className="px-3 py-1 bg-orange-500/20 text-orange-400 rounded hover:bg-orange-500/30 transition text-xs font-semibold"
-                          >
-                            Refund
-                          </button>
-                        )}
-                      </td>
+            <Card>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left text-xs uppercase tracking-wider text-purple-200/60 border-b border-white/10">
+                      <th className="p-4">User</th>
+                      <th className="p-4">Event</th>
+                      <th className="p-4">Amount</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {totalTxnPages > 1 && (
-              <div className="flex justify-center gap-2">
-                {[...Array(totalTxnPages)].map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setTxnPage(i + 1)}
-                    className={`px-4 py-2 rounded-lg transition ${
-                      txnPage === i + 1
-                        ? "bg-purple-600 text-white"
-                        : "bg-white/10 text-gray-300 hover:bg-white/20"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
+                  </thead>
+                  <tbody>
+                    {transactions.map((t) => (
+                      <tr
+                        key={t._id}
+                        className="border-b border-white/5 hover:bg-white/[0.03]"
+                      >
+                        <td className="p-4 text-white">
+                          {t.user?.name}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {t.event?.eventtitle}
+                        </td>
+                        <td className="p-4 text-white font-semibold">
+                          ₹{t.amount}
+                        </td>
+                        <td className="p-4 text-purple-200/70">
+                          {t.status}
+                        </td>
+                        <td className="p-4 flex gap-2">
+                          <button
+                            onClick={() => setSelectedTxn(t)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-blue-400/30 text-blue-300 hover:bg-blue-500/10"
+                          >
+                            View
+                          </button>
+                          {t.status === "success" && (
+                            <button
+                              onClick={() =>
+                                processRefund(t._id)
+                              }
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-amber-400/30 text-amber-300 hover:bg-amber-500/10"
+                            >
+                              Refund
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </Card>
           </div>
         )}
 
-        {/* REPORTS TAB */}
-        {activeTab === "reports" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {stats && (
-                <>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Total Users</p>
-                    <p className="text-4xl font-bold text-blue-400">
-                      {stats.totalUsers}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Active Events</p>
-                    <p className="text-4xl font-bold text-green-400">
-                      {stats.activeEvents}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Total Tickets</p>
-                    <p className="text-4xl font-bold text-purple-400">
-                      {stats.totalTickets}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Pending Events</p>
-                    <p className="text-4xl font-bold text-yellow-400">
-                      {stats.pendingEvents}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Total Events</p>
-                    <p className="text-4xl font-bold text-pink-400">
-                      {stats.totalEvents}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-                    <p className="text-gray-400 text-sm mb-3">Total Revenue</p>
-                    <p className="text-3xl font-bold text-orange-400">
-                      ₹{(stats.totalRevenue || 0).toLocaleString()}
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Platform Health
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    Key Metrics
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">User Growth</span>
-                      <span className="text-green-400 font-semibold">
-                        Healthy
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Event Approval Rate</span>
-                      <span className="text-green-400 font-semibold">Good</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">
-                        Transaction Success
-                      </span>
-                      <span className="text-green-400 font-semibold">
-                        Excellent
-                      </span>
-                    </div>
-                  </div>
+        {/* ---------------- REPORTS ---------------- */}
+        {activeTab === "reports" && stats && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              ["Total Users", stats.totalUsers],
+              ["Active Events", stats.activeEvents],
+              ["Total Tickets", stats.totalTickets],
+              ["Pending Events", stats.pendingEvents],
+              ["Total Events", stats.totalEvents],
+              ["Revenue", `₹${stats.totalRevenue || 0}`],
+            ].map((r, i) => (
+              <Card key={i}>
+                <div className="p-6">
+                  <p className="text-xs text-purple-200/60">{r[0]}</p>
+                  <p className="text-3xl font-bold text-white mt-2">
+                    {r[1]}
+                  </p>
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    Insights
-                  </h3>
-                  <ul className="space-y-2 text-sm text-gray-400">
-                    <li>✓ Platform performing optimally</li>
-                    <li>✓ High user engagement</li>
-                    <li>✓ Quality events increasing</li>
-                    <li>✓ Healthy revenue growth</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+              </Card>
+            ))}
           </div>
         )}
       </div>
 
-      {/* User Modal */}
+      {/* ---------------- MODALS (unchanged features, styled) ---------------- */}
+
       {selectedUser && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-8 max-w-md w-full">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">User Details</h2>
-              <button
-                onClick={() => setSelectedUser(null)}
-                className="text-gray-400 hover:text-white text-2xl"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <p className="text-gray-400 text-sm">Name</p>
-                <p className="text-white font-semibold">{selectedUser.name}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Email</p>
-                <p className="text-white font-semibold">
-                  {selectedUser.email}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Status</p>
-                <p
-                  className={`font-semibold ${
-                    selectedUser.status === "active"
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {selectedUser.status}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Joined</p>
-                <p className="text-white font-semibold">
-                  {new Date(selectedUser.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setSelectedUser(null)}
-              className="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:scale-105 transition"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <Modal onClose={() => setSelectedUser(null)} title="User details">
+          <ModalRow label="Name" value={selectedUser.name} />
+          <ModalRow label="Email" value={selectedUser.email} />
+          <ModalRow label="Status" value={selectedUser.status} />
+          <ModalRow
+            label="Joined"
+            value={new Date(
+              selectedUser.createdAt
+            ).toLocaleDateString()}
+          />
+        </Modal>
       )}
 
-      {/* Event Modal */}
       {selectedEvent && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">Event Details</h2>
-              <button
-                onClick={() => setSelectedEvent(null)}
-                className="text-gray-400 hover:text-white text-2xl"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {selectedEvent.imageUrl && (
-                <img
-                  src={selectedEvent.imageUrl}
-                  alt={selectedEvent.eventtitle}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-              )}
-              <div>
-                <p className="text-gray-400 text-sm">Title</p>
-                <p className="text-white font-semibold text-lg">
-                  {selectedEvent.eventtitle}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Description</p>
-                <p className="text-gray-300">{selectedEvent.description}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-gray-400 text-sm">Price</p>
-                  <p className="text-white font-semibold">
-                    ₹{selectedEvent.price}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Status</p>
-                  <p
-                    className={`font-semibold ${
-                      selectedEvent.status === "approved"
-                        ? "text-green-400"
-                        : selectedEvent.status === "pending"
-                        ? "text-yellow-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {selectedEvent.status}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setSelectedEvent(null)}
-              className="w-full mt-6 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:scale-105 transition"
-            >
-              Close
-            </button>
+        <Modal
+          onClose={() => setSelectedEvent(null)}
+          title="Event details"
+          wide
+        >
+          {selectedEvent.imageUrl && (
+            <img
+              src={selectedEvent.imageUrl}
+              alt=""
+              className="w-full h-52 object-cover rounded-xl mb-4"
+            />
+          )}
+          <ModalRow
+            label="Title"
+            value={selectedEvent.eventtitle}
+          />
+          <ModalRow
+            label="Description"
+            value={selectedEvent.description}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <ModalRow
+              label="Price"
+              value={`₹${selectedEvent.price}`}
+            />
+            <ModalRow
+              label="Status"
+              value={selectedEvent.status}
+            />
           </div>
-        </div>
+        </Modal>
       )}
 
-      {/* Transaction Modal */}
       {selectedTxn && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-[#1a1a24] to-[#0f0f14] border border-white/10 rounded-2xl p-8 max-w-md w-full">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">
-                Transaction Details
-              </h2>
-              <button
-                onClick={() => setSelectedTxn(null)}
-                className="text-gray-400 hover:text-white text-2xl"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <p className="text-gray-400 text-sm">User</p>
-                <p className="text-white font-semibold">
-                  {selectedTxn.user?.name}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Event</p>
-                <p className="text-white font-semibold">
-                  {selectedTxn.event?.eventtitle}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Amount</p>
-                <p className="text-white font-semibold text-lg">
-                  ₹{selectedTxn.amount}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Status</p>
-                <p
-                  className={`font-semibold ${
-                    selectedTxn.status === "success"
-                      ? "text-green-400"
-                      : selectedTxn.status === "refunded"
-                      ? "text-blue-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {selectedTxn.status}
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setSelectedTxn(null)}
-              className="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg font-semibold hover:scale-105 transition"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <Modal
+          onClose={() => setSelectedTxn(null)}
+          title="Transaction details"
+        >
+          <ModalRow
+            label="User"
+            value={selectedTxn.user?.name}
+          />
+          <ModalRow
+            label="Event"
+            value={selectedTxn.event?.eventtitle}
+          />
+          <ModalRow
+            label="Amount"
+            value={`₹${selectedTxn.amount}`}
+          />
+          <ModalRow
+            label="Status"
+            value={selectedTxn.status}
+          />
+        </Modal>
       )}
     </div>
   );
 };
+
+/* ---------- Small reusable UI ---------- */
+
+const Modal = ({ title, children, onClose, wide }) => (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div
+      className={`rounded-2xl border border-purple-400/20
+      bg-gradient-to-br from-[#0c0816] via-[#120a22] to-[#0c0816]
+      shadow-2xl shadow-purple-900/40
+      p-6 w-full ${wide ? "max-w-2xl" : "max-w-md"}`}
+    >
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-lg font-semibold text-white">
+          {title}
+        </h2>
+        <button
+          onClick={onClose}
+          className="text-purple-200/70 hover:text-white text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="space-y-4">{children}</div>
+
+      <button
+        onClick={onClose}
+        className="mt-6 w-full py-2.5 rounded-xl text-sm font-semibold
+        bg-gradient-to-r from-pink-500 to-purple-600
+        text-white shadow-lg shadow-pink-500/20 hover:shadow-pink-500/40 transition"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+);
+
+const ModalRow = ({ label, value }) => (
+  <div>
+    <p className="text-xs text-purple-200/60">{label}</p>
+    <p className="text-white font-medium mt-1 break-words">
+      {value}
+    </p>
+  </div>
+);
 
 export default Admin;
