@@ -24,6 +24,7 @@ import CreateEvent from './pages/OrganizerDashboard/CreateEvent.jsx';
 import Ticket from './pages/OrganizerDashboard/Ticket.jsx';
 import Admin from './pages/Admin.jsx';
 import Footer from './Components/Footer.jsx';
+import CategoryInfo from './pages/Home/CategoryInfo.jsx';
 
 function App() {
 
@@ -103,6 +104,8 @@ function App() {
           <Route path='/Create' element={<CreateEvent/>} />
           <Route path='/ticket' element={<Ticket/>} />
           <Route path='/admin' element={<Admin/>} />
+          <Route path="/explore/:category" element={<CategoryInfo />} />
+
           
         </Routes>
         <div>

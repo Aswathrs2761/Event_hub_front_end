@@ -49,6 +49,7 @@ This repository contains the **frontend** of the application built with **React 
 
 - can register has admin
 
+
 ### Frontend Capabilities
 - Role-based UI (User / Admin)
 - Protected routes

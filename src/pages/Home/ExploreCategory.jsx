@@ -10,7 +10,7 @@ const CATEGORY_META = {
   art: { icon: "🎨", color: "from-pink-600 to-rose-600", displayName: "Art" },
   food: { icon: "🍔", color: "from-green-600 to-emerald-600", displayName: "Food" },
   health: { icon: "🩺", color: "from-red-600 to-pink-600", displayName: "Health" },
-  other: { icon: "🎉", color: "from-fuchsia-600 to-purple-600", displayName: "Other" },
+  other: { icon: "🌟", color: "from-fuchsia-600 to-purple-600", displayName: "Other" },
 };
 
 const ExploreCategory = () => {
@@ -92,10 +92,7 @@ const ExploreCategory = () => {
             <div className={`w-24 h-24 rounded-full bg-gradient-to-r ${categoryData.color} flex items-center justify-center text-5xl mx-auto mb-8 shadow-2xl`}>
               {categoryData.icon}
             </div>
-            {/* <h2 className="text-3xl font-bold text-white mb-4">No {displayName} Events Found</h2>
-            <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto">
-              There are currently no {displayName.toLowerCase()} events available. Check back later or explore other categories.
-            </p> */}
+          
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => navigate('/categories')}
@@ -103,12 +100,7 @@ const ExploreCategory = () => {
               >
                 Explore Categories
               </button>
-              {/* <button
-                onClick={() => navigate('/events')}
-                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-2xl text-lg transition-all duration-300 border border-white/20"
-              >
-                View All Events
-              </button> */}
+              
             </div>
           </div>
         </div>

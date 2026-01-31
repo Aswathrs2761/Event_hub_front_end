@@ -11,7 +11,7 @@ const CATEGORY_META = {
   Art: { icon: "🎨", color: "from-pink-600 to-rose-600", bgColor: "from-pink-500/10 to-rose-500/10" },
   Food: { icon: "🍔", color: "from-green-600 to-emerald-600", bgColor: "from-green-500/10 to-emerald-500/10" },
   Health: { icon: "🩺", color: "from-red-600 to-pink-600", bgColor: "from-red-500/10 to-pink-500/10" },
-  Other: { icon: "🎉", color: "from-fuchsia-600 to-purple-600", bgColor: "from-fuchsia-500/10 to-purple-500/10" },
+  Other: { icon: "⭐", color: "from-fuchsia-600 to-purple-600", bgColor: "from-fuchsia-500/10 to-purple-500/10" },
 };
 
 export default function Categories() {

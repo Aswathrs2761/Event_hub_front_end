@@ -26,6 +26,8 @@ const EventDetail = () => {
           `https://event-hub-backend-uzcs.onrender.com/api/organizer/getEventsById/${id}`
         );
         setEvent(res.data);
+        console.log(res.data);
+        
       } catch (error) {
         console.error(error);
       } finally {
