@@ -83,6 +83,12 @@ This repository contains the **frontend** of the application built with **React 
     - Email: aswath12345@gmail.com
     - Password: 123456
 
+    to test payment use card number : 4242 4242 4242 4242
+    any future date
+    cvc : 123
+    zip : 12345
+
+
 ---
 
 ## 📦 Installation & Setup
